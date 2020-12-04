@@ -1,10 +1,10 @@
 #info-view {
-    display: grid;
     width: 50vw;
+    display: grid;
     grid-template-areas: 'state-desc ap-runtime-desc runtime-desc client-desc' 'state-show ap-runtime-show runtime-show client-show';
 }
 
-#info-view>* {
+#info-view > * {
     text-align: center;
     padding: 10px;
     display: flex;
@@ -12,11 +12,11 @@
     align-items: center;
 }
 
-#info-view>*:first-of-type {
+#info-view > *:first-of-type {
     border-radius: 10px 0 0 10px;
 }
 
-#info-view>*:nth-last-of-type(2) {
+#info-view > *:nth-last-of-type(2) {
     border-radius: 0 10px 10px 0;
 }
 
@@ -59,7 +59,6 @@
     grid-area: ap-runtime-show;
 }
 
-
 .desc.runtime {
     grid-area: runtime-desc;
 }
@@ -68,7 +67,7 @@
     grid-area: runtime-show;
 }
 
-.desc.client{
+.desc.client {
     grid-area: client-desc;
 }
 
