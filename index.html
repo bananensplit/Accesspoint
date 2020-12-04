@@ -4,10 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="info-view.css">
+    <link rel="stylesheet" type="text/css" href="controls.css">
+    <link rel="stylesheet" type="text/css" href="waiting.css">
     <script type="text/javascript" src="main.js" defer></script>
     <title>AccessPoint</title>
 </head>
 <body>
+<div id="info-view">
+    <div class="desc state">State</div>
+    <div class="show state"><div class="waiting"></div></div>
+    <div class="desc ap-runtime">AccessPoint running since</div>
+    <div class="show ap-runtime"><div class="waiting"></div></div>
+    <div class="desc runtime">PI running since</div>
+    <div class="show runtime"><div class="waiting"></div></div>
+    <div class="desc client">Connected Clients</div>
+    <div class="show client"><div class="waiting"></div></div>
+</div>
+<div id="controls">
+    <input onclick="changestateAP(true)" class="change-button noshut" type="button" value="Turn ON">
+    <input onclick="changestateAP(false)" class="change-button shut" type="button" value="Turn OFF">
+</div>
 
+<!--Fixes a bug has not really a purpose:-->
+<script> </script>
 </body>
 </html>

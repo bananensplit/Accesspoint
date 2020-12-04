@@ -1,0 +1,22 @@
+.waiting {
+    width: 12px;
+    height: 12px;
+    background-color: #0078db;
+    border-radius: 10000px;
+    animation-name: wait;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes wait {
+    0% {
+        background-color: #0078db;
+    }
+    50% {
+        transform: rotateY(180deg);
+        background-color: #003c6f;
+    }
+    100% {
+        background-color: #0078db;
+    }
+}

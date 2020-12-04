@@ -1,0 +1,23 @@
+.change-button {
+    font-weight: bold;
+    color: aliceblue;
+    background: darkblue;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: .4s;
+    outline: none;
+}
+
+.change-button:hover {
+    transform: scale(1.06);
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+}
+
+.change-button.noshut {
+    background: green;
+}
+
+.change-button.shut {
+    background: red;
+}
