@@ -12,7 +12,6 @@ function getData() {
             setRuntimeAP(data.status, data.runtime.AP, false)
             setRuntime(data.runtime.pi, false)
             setClients(data.clients, false)
-            console.log(data.whoami)
         }
     }
     xhttp.open("POST", "getData.php", true)
@@ -80,7 +79,6 @@ function changestateAP(state) {
             getData()
         }
     }
-    console.log(`start.php?do=${state ? 'start' : 'stop'}`)
     xhttp.open('POST', 'start.php', true)
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     xhttp.send(`do=${state ? 'start' : 'stop'}`)

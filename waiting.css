@@ -1,7 +1,7 @@
 .waiting {
     width: 12px;
     height: 12px;
-    background-color: #0078db;
+    background: rgba(0, 138, 255, 1);
     border-radius: 10000px;
     animation-name: wait;
     animation-duration: 1s;
@@ -10,13 +10,13 @@
 
 @keyframes wait {
     0% {
-        background-color: #0078db;
+        background-color: rgba(0, 138, 255, 1);
     }
     50% {
         transform: rotateY(180deg);
-        background-color: #003c6f;
+        background-color: rgba(13, 8, 130, 1);
     }
     100% {
-        background-color: #0078db;
+        background-color: rgba(0, 138, 255, 1);
     }
 }
