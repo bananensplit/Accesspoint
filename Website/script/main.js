@@ -15,7 +15,7 @@ function getData() {
         }
     }
     xhttp.open("POST", "getData.php", true)
-    xhttp.send();
+    xhttp.send()
 }
 
 
@@ -84,6 +84,17 @@ function changestateAP(state) {
 }
 
 function formatTime(date) {
-    date = new Date(date)
-    return date.toLocaleString()
+    date = new Date().getTime() - new Date(date).getTime();
+
+    let seconds = Math.floor(date / 1000 % 60)
+    let minutes = Math.floor(date / 1000 / 60 % 60)
+    let hours = Math.floor(date / 1000 / 60 / 60)
+
+    if (hours > 0) {
+        return `${hours} hour${hours > 1 ? 's' : ''}`
+    }
+    if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? 's' : ''}`
+    }
+    return `${seconds} second${seconds > 1 ? 's' : ''}`
 }
