@@ -86,10 +86,18 @@ function changestateAP(state) {
 function formatTime(date) {
     date = new Date().getTime() - new Date(date).getTime();
 
-    let seconds = Math.floor(date / 1000 % 60)
+    let weeks = Math.floor(date / 1000 / 60 / 60 / 24 / 7)
+    let days = Math.floor(date / 1000 / 60 / 60 / 24 % 7)
+    let hours = Math.floor(date / 1000 / 60 / 60 % 24)
     let minutes = Math.floor(date / 1000 / 60 % 60)
-    let hours = Math.floor(date / 1000 / 60 / 60)
+    let seconds = Math.floor(date / 1000 % 60)
 
+    if (weeks > 0) {
+        return `${weeks} week${weeks > 1 ? 's' : ''}`
+    }
+    if (days > 0) {
+        return `${days} day${days > 1 ? 's' : ''}`
+    }
     if (hours > 0) {
         return `${hours} hour${hours > 1 ? 's' : ''}`
     }
