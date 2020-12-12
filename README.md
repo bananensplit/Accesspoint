@@ -15,7 +15,7 @@ To setup this little Website on your own, do the following steps
 * Make sure the user of the webserver has the ability to execute the python files with sudo priviledges.
   I did this by adding data-www (user that apache uses) to /etc/sudoers  
   ```shell
-  data-www ALL:(root) /pathBlaBlaBla/ap-control.py
+  data-www ALL=(root) /pathBlaBlaBla/ap-control.py
   # would allow user 'data-www' to execute ap-control.py with root priviledges without asking for a password. 
   ```
   I know this **is not** the safest solution but couldn't find another that worked for me (Suggestions are very welcome)
