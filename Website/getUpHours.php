@@ -1,0 +1,5 @@
+<?php
+$output = '{"data":[{"date":"2021-01-01","hours":0},{"date":"2021-01-02","hours":1},{"date":"2021-01-03","hours":2},{"date":"2021-01-04","hours":3},{"date":"2021-01-05","hours":4},{"date":"2021-01-06","hours":5},{"date":"2021-01-07","hours":6},{"date":"2021-01-08","hours":7},{"date":"2021-01-09","hours":8},{"date":"2021-01-10","hours":9},{"date":"2021-01-11","hours":10},{"date":"2021-01-12","hours":11},{"date":"2021-01-13","hours":12},{"date":"2021-01-14","hours":13},{"date":"2021-01-15","hours":14},{"date":"2021-01-16","hours":15},{"date":"2021-01-17","hours":16},{"date":"2021-01-18","hours":17},{"date":"2021-01-19","hours":18},{"date":"2021-01-20","hours":19},{"date":"2021-01-21","hours":20},{"date":"2021-01-22","hours":21}]}';
+header('Content-Type: application/json');
+echo $output;
+die(200);

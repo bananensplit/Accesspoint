@@ -8,7 +8,12 @@
     <link rel="stylesheet" type="text/css" href="style/controls.css">
     <link rel="stylesheet" type="text/css" href="style/waiting.css">
     <link rel="stylesheet" type="text/css" href="style/responsive.css">
+    <link rel="stylesheet" type="text/css" href="style/chart.css">
+
     <script type="text/javascript" src="script/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.js" defer></script>
+    <script type="text/javascript" src="script/showdata.js" defer></script>
+
     <link rel="icon" type="image/png" href="images/icon.png">
     <title>AccessPoint</title>
 </head>
@@ -26,6 +31,10 @@
 <div id="controls">
     <input onclick="changestateAP(true)" class="change-button noshut" type="button" value="Turn ON">
     <input onclick="changestateAP(false)" class="change-button shut" type="button" value="Turn OFF">
+</div>
+
+<div id="analyse">
+    <canvas id="upHoursChart" width="50" height="15"></canvas>
 </div>
 
 <!--Fixes a bug, does not really have a purpose:-->
