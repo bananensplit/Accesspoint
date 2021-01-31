@@ -20,13 +20,21 @@
 <body>
 <div id="info-view">
     <div class="desc state">State</div>
-    <div class="show state"><div class="waiting"></div></div>
+    <div class="show state">
+        <div class="waiting"></div>
+    </div>
     <div class="desc ap-runtime">AP running since</div>
-    <div class="show ap-runtime"><div class="waiting"></div></div>
+    <div class="show ap-runtime">
+        <div class="waiting"></div>
+    </div>
     <div class="desc runtime">PI running since</div>
-    <div class="show runtime"><div class="waiting"></div></div>
+    <div class="show runtime">
+        <div class="waiting"></div>
+    </div>
     <div class="desc client">Connected Clients</div>
-    <div class="show client"><div class="waiting"></div></div>
+    <div class="show client">
+        <div class="waiting"></div>
+    </div>
 </div>
 <div id="controls">
     <input onclick="changestateAP(true)" class="change-button noshut" type="button" value="Turn ON">
@@ -34,10 +42,18 @@
 </div>
 
 <div id="analyse">
-    <canvas id="upHoursChart" width="50" height="15"></canvas>
+    <div id="charts">
+        <div id="upTimeChartDiv">
+            <canvas id="upTimeChart"></canvas>
+        </div>
+        <div id="accessCounterChartDiv">
+            <canvas id="accessCounterChart"></canvas>
+        </div>
+    </div>
+    <input onclick="getUpHours()" class="reload-button" type="button" value="Reload Charts">
 </div>
 
 <!--Fixes a bug, does not really have a purpose:-->
-<script> </script>
+<script></script>
 </body>
 </html>

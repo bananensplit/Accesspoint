@@ -1,5 +1,42 @@
 #analyse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#charts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+#upTimeChartDiv {
     position: relative;
-    width: 50vw;
-    height: 15vw;
+    width: 20vw;
+    height: 30vh;
+}
+
+#accessCounterChartDiv {
+    position: relative;
+    width: 20vw;
+    height: 30vh;
+}
+
+.reload-button {
+    font-weight: bold;
+    color: aliceblue;
+    background: rgba(0, 138, 255, 1);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: .4s;
+    outline: none;
+}
+
+.reload-button:hover {
+    transform: scale(1.06);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
 }
