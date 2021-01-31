@@ -6,22 +6,7 @@ let uptimeChart = new Chart(ctxUptimeChart, {
     type: 'bar',
     data: {
         labels: [],
-        datasets: [
-            {
-                label: 'Raspberry',
-                data: [],
-                backgroundColor: mycolors[0],
-                borderWidth: 0,
-                maxBarThickness: 20
-            },
-            {
-                label: 'Accesspoint',
-                data: [],
-                backgroundColor: mycolors[1],
-                borderWidth: 0,
-                maxBarThickness: 20
-            }
-        ]
+        datasets: []
     },
     options: {
         defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins'",
@@ -65,17 +50,7 @@ let accessCounterChart = new Chart(ctxAccessCounterChart, {
     type: 'line',
     data: {
         labels: [],
-        datasets: [
-            {
-                borderColor: mycolors[2],
-                data: [],
-                fill: false,
-                label: 'Accesses',
-                pointBackgroundColor: mycolors[3],
-                pointBorderColor: mycolors[3],
-                pointRadius: 3.5
-            }
-        ]
+        datasets: []
     },
     options: {
         defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins'",
@@ -99,7 +74,6 @@ let accessCounterChart = new Chart(ctxAccessCounterChart, {
             yAxes: [{
                 ticks: {
                     callback: function (value, index, values) {
-                        console.log(index)
                         if (index % 2 === 0) {
                             return value;
                         } else {
@@ -118,30 +92,53 @@ function getUpHours() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             let data = JSON.parse(this.responseText);
-            uptimeChart.data.labels = data.data.map(x => x.date);
-            uptimeChart.data.datasets[0].data = data.data.map(x => x.raspberryUptime);
-            uptimeChart.data.datasets[1].data = data.data.map(x => x.apUptime);
-            uptimeChart.update();
 
-            let len = accessCounterChart.data.labels.length
-            accessCounterChart.data.labels = data.data.slice(0, len).map(x => x.date);
-            accessCounterChart.data.datasets[0].data = data.data.slice(0, len).map(x => Math.random() * 50);
-            accessCounterChart.update();
-
-            for (let i = len; i < data.data.length; i++) {
-                accessCounterChart.data.labels.push(data.data[i].date);
-                accessCounterChart.data.datasets[0].data.push(0);
-                accessCounterChart.update();
+            if (uptimeChart.data.datasets.length <= 0) {
+                let raspberryUptime = {
+                    label: 'Raspberry',
+                    data: data.data.map(x => x.raspberryUptime),
+                    backgroundColor: mycolors[0],
+                    borderWidth: 0,
+                    maxBarThickness: 20
+                };
+                let apUptime = {
+                    label: 'Accesspoint',
+                    data: data.data.map(x => x.apUptime),
+                    backgroundColor: mycolors[1],
+                    borderWidth: 0,
+                    maxBarThickness: 20
+                };
+                uptimeChart.data.labels = data.data.map(x => x.date);
+                uptimeChart.data.datasets.push(raspberryUptime, apUptime);
+                uptimeChart.update();
+            } else {
+                uptimeChart.data.labels = data.data.map(x => x.date);
+                uptimeChart.data.datasets[0].data = data.data.map(x => x.raspberryUptime);
+                uptimeChart.data.datasets[1].data = data.data.map(x => x.apUptime);
+                uptimeChart.update();
             }
 
-
-            for (let i = len; i < data.data.length; i++) {
-                accessCounterChart.data.datasets[0].data[i] = data.data[i].accesses;
+            if (accessCounterChart.data.datasets.length <= 0) {
+                let dailyAccesses = {
+                    borderColor: mycolors[2],
+                    data: data.data.map(x => x.accesses),
+                    fill: false,
+                    label: 'Accesses',
+                    pointBackgroundColor: mycolors[3],
+                    pointBorderColor: mycolors[3],
+                    pointRadius: 3.5
+                };
+                accessCounterChart.data.labels = data.data.map(x => x.date);
+                accessCounterChart.data.datasets.push(dailyAccesses);
+                accessCounterChart.update();
+            } else {
+                accessCounterChart.data.labels = data.data.map(x => x.date);
+                accessCounterChart.data.datasets[0].data = data.data.map(x => x.accesses);
                 accessCounterChart.update();
             }
         }
     }
 
-    xhttp.open("POST", "getUpHours.php", true);
+    xhttp.open("POST", "../Website/getUpHours.php", true);
     xhttp.send();
 }
