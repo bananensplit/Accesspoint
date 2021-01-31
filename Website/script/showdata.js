@@ -87,7 +87,7 @@ let accessCounterChart = new Chart(ctxAccessCounterChart, {
 });
 
 
-function getUpHours() {
+function updateCharts() {
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -139,6 +139,6 @@ function getUpHours() {
         }
     }
 
-    xhttp.open("POST", "../Website/getUpHours.php", true);
+    xhttp.open("POST", "../Website/getChartData.php", true);
     xhttp.send();
 }
