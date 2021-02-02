@@ -9,7 +9,7 @@ let uptimeChart = new Chart(ctxUptimeChart, {
         datasets: []
     },
     options: {
-        defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins'",
+        defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins', sans-serif",
         maintainAspectRatio: false,
         title: {
             display: true,
