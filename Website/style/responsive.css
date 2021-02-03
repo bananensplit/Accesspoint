@@ -23,12 +23,16 @@
         flex-direction: column;
     }
 
-    .change-button {
-        padding: 20px 100px;
-        font-size: larger;
+    .button {
+        padding: 10px 40px;
+        font-size: large;
     }
 
     .change-button.noshut {
         margin-bottom: 10px;
+    }
+
+    #accessCounterChartDiv, #upTimeChartDiv {
+        width: 95vw;
     }
 }
