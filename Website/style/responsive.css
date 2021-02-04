@@ -1,4 +1,13 @@
 @media only screen and (max-width: 940px) {
+    body {
+        height: initial;
+    }
+
+    main {
+        height: 100vh;
+        margin: initial;
+    }
+
     #info-view {
         width: 100vw;
         grid-template-areas: 'state-desc state-show' 'ap-runtime-desc ap-runtime-show' 'runtime-desc runtime-show' 'client-desc client-show';
@@ -32,7 +41,21 @@
         margin-bottom: 10px;
     }
 
+    #discovermore {
+        display: initial;
+    }
+
+    #analyse {
+        height: 100vh;
+    }
+
+    #charts {
+        flex-direction: column;
+    }
+
     #accessCounterChartDiv, #upTimeChartDiv {
         width: 95vw;
+        height: 35vh;
+        margin-bottom: 20px;
     }
 }

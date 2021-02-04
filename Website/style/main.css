@@ -1,11 +1,11 @@
 main {
     width: 100vw;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     position: relative;
+    margin-bottom: 50px;
 }
 
 
@@ -107,4 +107,5 @@ main {
     position: absolute;
     font-size: large;
     bottom: 10px;
+    display: none;
 }

@@ -4,22 +4,20 @@
     align-items: center;
     flex-direction: column;
     width: 100vw;
-    height: 100vh;
 }
 
 #charts {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     margin-bottom: 20px;
 }
 
 #upTimeChartDiv, #accessCounterChartDiv {
     position: relative;
-    width: 50vw;
-    height: 40vh;
-    margin-bottom: 20px;
+    width: 25vw;
+    height: 30vh;
 }
 
 .button.reload-button {
