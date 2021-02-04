@@ -40,9 +40,8 @@ main {
 }
 
 .show {
-    font-weight: bold;
+    font-weight: 500;
 }
-
 
 .desc.state {
     grid-area: state-desc;

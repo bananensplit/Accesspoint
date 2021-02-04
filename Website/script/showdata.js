@@ -1,6 +1,12 @@
 'use strict';
 
-let mycolors = ['#FFBD26', '#E04B3F', '#bcd4ff', '#5393ff'];
+// let mycolors = ['#FFBD26', '#E04B3F', '#bcd4ff', '#5393ff'];
+// let mycolors = ['#3CAEA3', '#E04B3F', '#20639B', '#173F5F'];
+// let mycolors = ['#3CAEA3', '#20639B', '#FFBD26', '#E04B3F'];
+// let mycolors = ['#FFBD26', '#E04B3F', '#4de0d3', '#0779db'];
+// let mycolors = ['#FFBD26', '#ff7600', '#4de0d3', '#0779db'];
+let mycolors = ['#E04B3F', '#ff8d2f', '#a5d3fc', '#0779db'];
+
 let ctxUptimeChart = document.getElementById('upTimeChart').getContext('2d');
 let uptimeChart = new Chart(ctxUptimeChart, {
     type: 'bar',
@@ -139,6 +145,8 @@ function updateCharts() {
         }
     }
 
-    xhttp.open("POST", "../Website/getChartData.php", true);
+    xhttp.open("POST", "getChartData.php", true);
     xhttp.send();
 }
+
+updateCharts();
