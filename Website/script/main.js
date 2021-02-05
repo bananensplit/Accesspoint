@@ -35,7 +35,7 @@ function setState(state, waiting) {
         element.innerHTML = 'OFF'
         element.className = 'show state off'
     } else {
-        element.innerHTML = 'other'
+        element.innerHTML = 'OTHER'
         element.className = 'show state other'
     }
 }
