@@ -1,10 +1,5 @@
 'use strict';
-// let mycolors = ['#FFBD26', '#E04B3F', '#bcd4ff', '#5393ff'];
-// let mycolors = ['#3CAEA3', '#E04B3F', '#20639B', '#173F5F'];
-// let mycolors = ['#3CAEA3', '#20639B', '#FFBD26', '#E04B3F'];
-// let mycolors = ['#FFBD26', '#E04B3F', '#4de0d3', '#0779db'];
-// let mycolors = ['#FFBD26', '#ff7600', '#4de0d3', '#0779db'];
-let mycolors = ['#E04B3F', '#ff8d2f', '#a5d3fc', '#0779db'];
+let mycolors = ['#f1544f', '#fa9242', 'rgba(44,139,219,0.3)', '#207dca'];
 
 let ctxUptimeChart = document.getElementById('upTimeChart').getContext('2d');
 let uptimeChart = new Chart(ctxUptimeChart, {
@@ -29,7 +24,7 @@ let uptimeChart = new Chart(ctxUptimeChart, {
                 time: {
                     minUnit: 'day',
                     unit: 'day'
-                },
+                }
             }],
             yAxes: [{
                 ticks: {
@@ -68,13 +63,16 @@ let accessCounterChart = new Chart(ctxAccessCounterChart, {
         datasets: []
     },
     options: {
-        defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins'",
+        defaultFontFamily: Chart.defaults.global.defaultFontFamily = "'Poppins', sans-serif",
         maintainAspectRatio: false,
         title: {
             display: true,
             text: 'Accesses',
             fontSize: 16,
             fontColor: '#242424'
+        },
+        legend: {
+            display: false
         },
         scales: {
             xAxes: [{
@@ -113,7 +111,9 @@ let accessCounterChart = new Chart(ctxAccessCounterChart, {
     }
 });
 
-function updateCharts(dataAmount = 14) {
+function updateCharts(dataAmount = 100) {
+    if (dataAmount < 14) dataAmount = 14;
+
     let xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {

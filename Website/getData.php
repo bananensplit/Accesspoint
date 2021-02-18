@@ -1,5 +1,5 @@
 <?php
-$output = exec('../getData.py');
+$output = exec('../backend/getData.py');
 header('Content-Type: application/json');
 echo $output;
 die(200);
