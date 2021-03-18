@@ -33,6 +33,7 @@ body {
     border-radius: 10px;
     transition: .4s;
     outline: none;
+    cursor: pointer;
 }
 
 .button:hover {

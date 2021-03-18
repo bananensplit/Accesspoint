@@ -124,14 +124,14 @@ function updateCharts(dataAmount = 100) {
                     label: 'Raspberry',
                     data: data.data
                         .filter((value, index) => index < dataAmount)
-                        .map(x => ({x: x.utcDate, y: x.raspberryUptime})),
+                        .map(x => ({x: x.date, y: secToHourAndRound(x.raspberryUptime)})),
                     backgroundColor: mycolors[0],
                 };
                 let apUptime = {
                     label: 'Accesspoint',
                     data: data.data
                         .filter((value, index) => index < dataAmount)
-                        .map(x => ({x: x.utcDate, y: x.apUptime})),
+                        .map(x => ({x: x.date, y: secToHourAndRound(x.apUptime)})),
                     backgroundColor: mycolors[1],
                 };
                 uptimeChart.data.datasets.push(raspberryUptime, apUptime);
@@ -139,10 +139,10 @@ function updateCharts(dataAmount = 100) {
             } else {
                 uptimeChart.data.datasets[0].data = data.data
                     .filter((value, index) => index < dataAmount)
-                    .map(x => ({x: x.utcDate, y: x.raspberryUptime}));
+                    .map(x => ({x: x.date, y: secToHourAndRound(x.raspberryUptime)}));
                 uptimeChart.data.datasets[1].data = data.data
                     .filter((value, index) => index < dataAmount)
-                    .map(x => ({x: x.utcDate, y: x.apUptime}));
+                    .map(x => ({x: x.date, y: secToHourAndRound(x.apUptime)}));
                 uptimeChart.update();
             }
 
@@ -151,7 +151,7 @@ function updateCharts(dataAmount = 100) {
                     label: 'Accesses',
                     data: data.data
                         .filter((value, index) => index < dataAmount)
-                        .map(x => ({x: x.utcDate, y: x.accesses})),
+                        .map(x => ({x: x.date, y: x.accesses})),
                     borderColor: mycolors[3],
                     borderWidth: 2,
                     lineTension: 0,
@@ -165,7 +165,7 @@ function updateCharts(dataAmount = 100) {
             } else {
                 accessCounterChart.data.datasets[0].data = data.data
                     .filter((value, index) => index < dataAmount)
-                    .map(x => ({x: x.utcDate, y: x.accesses}));
+                    .map(x => ({x: x.date, y: x.accesses}));
                 accessCounterChart.update();
             }
         }
@@ -173,6 +173,12 @@ function updateCharts(dataAmount = 100) {
 
     xhttp.open("POST", "getChartData.php", true);
     xhttp.send();
+}
+
+function secToHourAndRound(seconds, decimals = 2) {
+    decimals = Math.pow(10, decimals);
+    let hours = seconds / 60 / 60;
+    return Math.round(hours * decimals) / decimals;
 }
 
 updateCharts();

@@ -1,5 +1,5 @@
 <?php
-$output = exec('sudo ../backend/getChartData.py');
+$output = exec('sudo ../backend/getChartData.py -d 14');
 header('Content-Type: application/json');
-echo json_decode(json_encode($output));
+echo $output;
 die(200);

@@ -1,8 +1,5 @@
 <?php
-if (isset($_POST['do']) && $_POST['do'] == 'start') {
-    exec('sudo ../backend/ap-control.py 1');
-    die(200);
-} else if (isset($_POST['do']) && $_POST['do'] == 'stop') {
-    exec('sudo ../backend/ap-control.py 0');
+if (isset($_POST['do'])) {
+    exec('sudo ../backend/ap-control.py --' . $_POST['do']);
     die(200);
 }
