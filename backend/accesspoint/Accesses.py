@@ -51,9 +51,3 @@ class Accesses:
 
     def update_accesses(self):
         self.__get_daily_accesses()
-
-
-if __name__ == '__main__':
-    accesses = Accesses(ReadLog('../Resources', 'other_vhosts_access\\.log.*'), '.*:2000')
-    for x in accesses.get_number_accesses():
-        print(x)
