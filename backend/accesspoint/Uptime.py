@@ -9,8 +9,7 @@ class Uptime:
         self._journal = journal
         self._ap_uptimes = {}
         self._rp_uptimes = {}
-        self.__get_ap_uptimes()
-        self.__get_rp_uptimes()
+        self.update_uptimes()
 
     @property
     def ap_uptimes(self):
@@ -159,3 +158,7 @@ class Uptime:
             current += timedelta(days=1)
 
         return erg
+
+    def update_uptimes(self):
+        self.__get_rp_uptimes()
+        self.__get_ap_uptimes()

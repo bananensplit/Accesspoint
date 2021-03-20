@@ -2,6 +2,7 @@
 import gzip
 import os
 import re
+import threading
 from datetime import datetime
 
 
@@ -52,15 +53,23 @@ class ReadLog:
                 self._log_files.append(element_path)
 
     def __read_logs(self):
+        threads = []
         for file in self._log_files:
-            if os.path.splitext(file)[-1] == '.gz':
-                with gzip.open(file, 'r') as f:
-                    for line in f.readlines():
-                        self._logs.append(self.__interpret_log(line.decode('utf-8').strip()))
-            else:
-                with open(file, 'r') as f:
-                    for line in f.readlines():
-                        self._logs.append(self.__interpret_log(line.strip()))
+            thread = threading.Thread(target=self.__read_log_file, args=(file,))
+            thread.start()
+            threads.append(thread)
+        for thread in threads:
+            thread.join()
+
+    def __read_log_file(self, file):
+        if os.path.splitext(file)[-1] == '.gz':
+            with gzip.open(file, 'r') as f:
+                for line in f.readlines():
+                    self._logs.append(self.__interpret_log(line.decode('utf-8').strip()))
+        else:
+            with open(file, 'r') as f:
+                for line in f.readlines():
+                    self._logs.append(self.__interpret_log(line.strip()))
 
     def __interpret_log(self, line: str):
         data = re.match(

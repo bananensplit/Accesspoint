@@ -27,7 +27,6 @@ class Accesses:
 
     def __get_daily_accesses(self, ):
         for log in self._readlog.logs:
-            print(log)
             if re.match(self._match_request, log['request']) and re.match(self._match_destination, log['destination']):
                 if log['timestamp'].date() in self._daily_accesses:
                     self._daily_accesses[log['timestamp'].date()].append(log)
