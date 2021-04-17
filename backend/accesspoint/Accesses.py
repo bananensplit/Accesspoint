@@ -12,6 +12,7 @@ class Accesses:
         self._match_destination = match_destination
         self._match_request = match_reqeust
         self.update_accesses()
+        self.__get_daily_accesses()
 
     @property
     def daily_accesses(self):
@@ -27,6 +28,7 @@ class Accesses:
 
     def __get_daily_accesses(self, ):
         for log in self._readlog.logs:
+            log = self._readlog.interpret_log(log)
             if re.match(self._match_request, log['request']) and re.match(self._match_destination, log['destination']):
                 if log['timestamp'].date() in self._daily_accesses:
                     self._daily_accesses[log['timestamp'].date()].append(log)
@@ -49,4 +51,6 @@ class Accesses:
         return erg
 
     def update_accesses(self):
+        self._readlog.update_logs()
+        self._daily_accesses = {}
         self.__get_daily_accesses()

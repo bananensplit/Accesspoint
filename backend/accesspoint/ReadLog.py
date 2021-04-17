@@ -7,36 +7,30 @@ from datetime import datetime
 
 
 class ReadLog:
-    def __init__(self, directory: str, match_name: str = '.*'):
+    def __init__(self, directory: str, match_file: str = '.*', match_line: str = '.*'):
         if not os.path.exists(directory):
             raise FileNotFoundError
         if not os.path.isdir(directory):
             raise NotADirectoryError
         self._directory = directory
-        self._match_name = match_name
+        self._match_file = match_file
+        self._match_line = match_line
         self._log_files = []
         self._logs = []
-        self.update_logs()
+        self.__get_log_files()
+        self.__read_logs()
 
     @property
     def directory(self):
         return self.directory
 
-    @directory.setter
-    def directory(self, value):
-        if not os.path.exists(value):
-            raise FileNotFoundError
-        if not os.path.isdir(value):
-            raise NotADirectoryError
-        self._directory = value
-
     @property
     def match_name(self):
-        return self._match_name
+        return self._match_file
 
-    @match_name.setter
-    def match_name(self, value):
-        self._match_name = value
+    @property
+    def match_line(self):
+        return self._match_line
 
     @property
     def log_files(self):
@@ -49,7 +43,7 @@ class ReadLog:
     def __get_log_files(self):
         for element in os.listdir(self._directory):
             element_path = os.path.join(self._directory, element)
-            if os.path.isfile(element_path) and re.match(self._match_name, os.path.basename(element_path)):
+            if os.path.isfile(element_path) and re.match(self._match_file, os.path.basename(element_path)):
                 self._log_files.append(element_path)
 
     def __read_logs(self):
@@ -65,13 +59,18 @@ class ReadLog:
         if os.path.splitext(file)[-1] == '.gz':
             with gzip.open(file, 'r') as f:
                 for line in f.readlines():
-                    self._logs.append(self.__interpret_log(line.decode('utf-8').strip()))
+                    line = line.decode('utf-8').strip()
+                    if re.match(self._match_line, line):
+                        self._logs.append(line)
         else:
             with open(file, 'r') as f:
                 for line in f.readlines():
-                    self._logs.append(self.__interpret_log(line.strip()))
+                    line = line.strip()
+                    if re.match(self._match_line, line):
+                        self._logs.append(line)
 
-    def __interpret_log(self, line: str):
+    @staticmethod
+    def interpret_log(line: str):
         data = re.match(
             '(.*?) (.*?) .*? .*? \\[(.*)] \\"(.*?)\\" (\\d+|-) (\\d+|-) \\"(.*?)\\" \\"(.*)\\"',
             line)
@@ -87,5 +86,7 @@ class ReadLog:
         }
 
     def update_logs(self):
+        self._log_files = []
+        self._logs = []
         self.__get_log_files()
         self.__read_logs()

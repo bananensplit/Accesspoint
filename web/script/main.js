@@ -2,20 +2,19 @@
 
 setInterval(getData, 1000)
 
-function getData() {
-    let xhttp = new XMLHttpRequest();
+let socketGeneralInfo = new MyWebsocket('ws://192.168.0.100:3000')
 
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let data = JSON.parse(this.responseText)
-            setState(data.status, false)
-            setRuntimeAP(data.status, data.runtime.AP, false)
-            setRuntime(data.runtime.pi, false)
-            setClients(data.clients, false)
-        }
+async function getData() {
+    while (!socketGeneralInfo.checkIfUp()) {
+        await sleep(1000)
     }
-    xhttp.open("POST", "getData.php", true)
-    xhttp.send()
+    socketGeneralInfo.getData('generalinfo').then(value => {
+        let data = JSON.parse(value.data).data
+        setState(data.status, false)
+        setRuntimeAP(data.status, data.runtime.AP, false)
+        setRuntime(data.runtime.pi, false)
+        setClients(data.clients, false)
+    })
 }
 
 
@@ -84,7 +83,7 @@ function changestateAP(state) {
 }
 
 function formatTime(date) {
-    date = new Date().getTime() - new Date(date).getTime();
+    date = moment().utc().valueOf() - moment(date).utc().valueOf();
 
     let weeks = Math.floor(date / 1000 / 60 / 60 / 24 / 7)
     let days = Math.floor(date / 1000 / 60 / 60 / 24 % 7)
@@ -93,16 +92,16 @@ function formatTime(date) {
     let seconds = Math.floor(date / 1000 % 60)
 
     if (weeks > 0) {
-        return `${weeks} week${weeks > 1 ? 's' : ''}`
+        return `${weeks} week${weeks > 1 ? 's' : ''} ${days} day${days > 1 ? 's' : ''}`
     }
     if (days > 0) {
-        return `${days} day${days > 1 ? 's' : ''}`
+        return `${days} day${days > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`
     }
     if (hours > 0) {
-        return `${hours} hour${hours > 1 ? 's' : ''}`
+        return `${hours} hour${hours > 1 ? 's' : ''} ${minutes} min${minutes > 1 ? 's' : ''}`
     }
     if (minutes > 0) {
-        return `${minutes} minute${minutes > 1 ? 's' : ''}`
+        return `${minutes} min${minutes > 1 ? 's' : ''} ${seconds} sec${seconds > 1 ? 's' : ''}`
     }
-    return `${seconds} second${seconds > 1 ? 's' : ''}`
+    return `${seconds} sec${seconds > 1 ? 's' : ''}`
 }

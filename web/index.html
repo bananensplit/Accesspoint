@@ -10,8 +10,12 @@
     <link rel="stylesheet" type="text/css" href="style/responsive.css">
     <link rel="stylesheet" type="text/css" href="style/Font-Poppins/fonts.css">
 
-    <script type="text/javascript" src="script/lib/moment.js" defer></script>
-    <script type="text/javascript" src="script/lib/chart.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.0" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0" defer></script>
+<!--    <script type="text/javascript" src="script/lib/moment.js" defer></script>-->
+<!--    <script type="text/javascript" src="script/lib/chart.js" defer></script>-->
+    <script type="text/javascript" src="script/MyWebsocket.js" defer></script>
     <script type="text/javascript" src="script/main.js" defer></script>
     <script type="text/javascript" src="script/showdata.js" defer></script>
     <script type="text/javascript" src="script/scroll.js" defer></script>
@@ -57,7 +61,7 @@
             <canvas id="accessCounterChart"></canvas>
         </div>
     </div>
-    <input onclick="updateCharts()" class="button reload-button" type="button" value="Reload Charts">
+    <input onclick="getData()" class="button reload-button" type="button" value="Reload Charts">
 </div>
 
 <!--Fixes a bug, does not really have a purpose:-->
