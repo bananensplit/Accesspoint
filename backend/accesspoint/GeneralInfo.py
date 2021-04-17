@@ -69,8 +69,3 @@ class GeneralInfo:
             },
             'clients': self._clients_count
         }
-
-
-if __name__ == '__main__':
-    asdasd = GeneralInfo()
-    print(asdasd.get_as_dict())
