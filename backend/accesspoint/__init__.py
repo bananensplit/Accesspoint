@@ -14,23 +14,17 @@ from accesspoint.Uptime import Uptime
 
 
 async def client_handler(websocket, path):
-    print('Client: Serving client')
     while True:
-        print('Client: Waiting for request')
         request = await websocket.recv()
 
         if request.lower() == 'chartdata':
             with threading.Lock():
                 global data_cache
-                print('Client: Request for chartdata')
                 await websocket.send(f'{{"data": {json.dumps(data_cache)} }}')
-                print('Client: response send')
 
         if request.lower() == 'generalinfo':
-                print('Client: Request for generalinfo')
-                generalinfo.update_general_info()
-                await websocket.send(f'{{"data": {json.dumps(generalinfo.get_as_dict())} }}')
-                print('Client: response send')
+            generalinfo.update_general_info()
+            await websocket.send(f'{{"data": {json.dumps(generalinfo.get_as_dict())} }}')
 
 
 def start_websocket():
@@ -45,13 +39,10 @@ def update_data(interval=5):
         start = datetime.now().date() - timedelta(14)
         end = datetime.now().date()
 
-        print('Reloading: uptimes')
         uptime.update_uptimes()
 
-        print('Reloading: accesses')
         accesses.update_accesses()
 
-        print('Reloading: write to cache')
         uptime_data = uptime.get_as_list(start, end)
         accesses_data = accesses.get_number_accesses(start, end)
 
@@ -71,15 +62,14 @@ def update_data(interval=5):
             global data_cache
             data_cache = erg
 
-        print('Reloading: Finished')
         time.sleep(interval)
 
 
 def main():
     global uptime, accesses, generalinfo
     uptime = Uptime()
-    accesses = Accesses(ReadLog('../Resources/new', 'other_vhosts_access\\.log.*'), '.*:2000')
-    # accesses = Accesses(ReadLog('/var/log/apache2', 'other_vhosts_access\\.log.*'), '.*:2000')
+    # accesses = Accesses(ReadLog('../Resources/new', 'other_vhosts_access\\.log.*'), '.*:2000')
+    accesses = Accesses(ReadLog('/var/log/apache2', 'other_vhosts_access\\.log.*'), '.*:2000')
     generalinfo = GeneralInfo()
 
     thread1 = threading.Thread(target=start_websocket)
