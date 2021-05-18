@@ -31,9 +31,7 @@ class GeneralInfo:
     def __get_status_ap(self):
         command = 'systemctl is-active hostapd'
         process = subprocess.Popen(command.split(' '), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        match = re.match(".*?(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}).*?",
-                         process.stdout.read().decode('ascii').replace('\n', ''))
-        self._status_ap = match.group(1)
+        self._status_ap = process.stdout.read().decode('ascii').replace('\n', '')
 
     def __get_runtime_rp(self):
         command = 'uptime -s'
@@ -43,7 +41,7 @@ class GeneralInfo:
     def __get_runtime_ap(self):
         command = 'systemctl show hostapd --property=ActiveEnterTimestamp --value'
         process = subprocess.Popen(command.split(' '), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        self._runtime_ap = process.stdout.read().decode('ascii').replace('\n', '').replace(' CET', '')
+        self._runtime_ap = process.stdout.read().decode('ascii').replace('\n', '').replace(' CEST', '')
 
     def __get_clients(self):
         command = 'iw dev wlan0 station dump | grep Station | wc -l'.split(' | ')
