@@ -57,7 +57,7 @@ function App() {
                 <div className="desc">PI running since</div>
                 <div className="show">{info?.["pi-uptime"] ? getTimeStr(info?.["pi-uptime"]) : <Waiting />}</div>
                 <div className="desc">Connected Clients</div>
-                <div className="show">{info?.["clients"] || <Waiting />}</div>
+                <div className="show">{info ? (info?.["ap-state"] === 'active' ?  info?.["clients"] : '-') : <Waiting />}</div>
             </div>
             <div id="controls">
                 <button onClick={apUp} className={"onBtn"}>
@@ -67,6 +67,7 @@ function App() {
                     turn off
                 </button>
             </div>
+            <div className="nice">Wer das liest ist dumm :D</div>
         </div>
     );
 }

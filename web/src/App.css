@@ -110,3 +110,12 @@
         margin-bottom: 10px;
     }
 }
+
+
+/* --- nice --- */
+.nice {
+    position: absolute;
+    bottom: 10px;
+    font-size: smaller;
+    color: rgb(158, 158, 158);
+}
