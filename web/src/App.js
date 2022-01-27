@@ -11,7 +11,7 @@ function App() {
     const [info, setInfo] = useState(null); // Info
 
     useEffect(() => {
-        ws = new WebSocket("ws://192.168.0.100:8001");
+        ws = new WebSocket("wss://ap.bananensplit.com/api");
 
         ws.onopen = function (event) {
             setIntervalId(setInterval(fetchData, 100));
@@ -53,7 +53,7 @@ function App() {
                 <div className="desc">State</div>
                 <div className="show">{info?.["ap-state"] ? <State state={info?.["ap-state"]} /> : <Waiting />}</div>
                 <div className="desc">AP running since</div>
-                <div className="show">{info?.["ap-uptime"] ? getTimeStr(info["ap-uptime"]) : <Waiting />}</div>
+                <div className="show">{info ? ((info?.["ap-state"] === 'active' && info?.["ap-uptime"] && getTimeStr(info["ap-uptime"])) || '-') : <Waiting />}</div>
                 <div className="desc">PI running since</div>
                 <div className="show">{info?.["pi-uptime"] ? getTimeStr(info?.["pi-uptime"]) : <Waiting />}</div>
                 <div className="desc">Connected Clients</div>
