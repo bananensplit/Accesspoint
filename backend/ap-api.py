@@ -1,13 +1,17 @@
 #!/usr/bin/python3
 
 import asyncio
-from datetime import datetime
-from logging import handlers
 import json
 import logging
+import re
 import subprocess as sp
 import time
+from datetime import datetime
+from functools import cache
+from logging import handlers
+from re import split
 
+import pandas as pd
 import websockets
 
 
@@ -18,7 +22,7 @@ async def handler(websocket):
 
         if 'type' not in data:
             await websocket.send(hello_world())
-            continuine
+            continue
 
         if data['type'] == "info":
             await websocket.send(info())
@@ -57,7 +61,11 @@ def info():
         return datetime.timestamp(datetime.strptime(data, '%a %Y-%m-%d %H:%M:%S %Z'))
 
     def clients():
-        return 'coming soon!'
+        command = 'iw dev wlan0 station dump | grep Station | wc -l'.split(' | ')
+        iw = sp.Popen(command[0].split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
+        grep = sp.Popen(command[1].split(' '), stdin=iw.stdout, stdout=sp.PIPE, stderr=sp.STDOUT)
+        wc = sp.Popen(command[2].split(' '), stdin=grep.stdout, stdout=sp.PIPE, stderr=sp.STDOUT)
+        return int(wc.stdout.read().decode('ascii').replace('\n', ''))
 
     return json.dumps({
         'timestamp': time.time() * 1000,
@@ -105,5 +113,5 @@ async def main():
 if __name__ == "__main__":
     logger = logging.getLogger('websockets')
     logger.setLevel(logging.WARN)
-    logger.addHandler(logging.handlers.RotatingFileHandler("ap-websocket.log", maxBytes=10_000_000, backupCount=2, encoding='UTF-8'))
+    logger.addHandler(logging.handlers.RotatingFileHandler, "ap-websocket.log", maxBytes=10_000_000, backupCount=2, encoding='UTF-8')
     asyncio.run(main())
