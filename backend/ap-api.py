@@ -93,7 +93,7 @@ def clients_info():
 
     return json.dumps({
         'timestamp': time.time() * 1000,
-        'type': 'info',
+        'type': 'clients_info',
         'data': data
     })
 
@@ -132,6 +132,8 @@ def parse_station_dump(output):
     lines = [line.split(":") for line in lines]
     lines = {line[0]: line[1] for line in lines}
 
+    logger.info(lines)
+
     return {
         'mac': mac_address,
         'vendor': get_vendor_name(mac_address),
@@ -156,7 +158,7 @@ def get_vendor_name(mac_address):
     macs = get_mac_addresses()
     mac = re.sub(r"[-:]", "", mac_address)[0:6].upper()
     erg = macs.loc[macs["Assignment"] == mac, "Organization Name"].values
-    return None if len(erg) >= 0 else erg[0]
+    return erg[0] if len(erg) >= 0 else None
 
 
 async def main():
