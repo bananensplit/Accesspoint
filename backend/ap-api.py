@@ -3,13 +3,10 @@
 import asyncio
 import json
 import logging
-import re
 import subprocess as sp
 import time
 from datetime import datetime
-from functools import cache
 from logging import handlers
-from re import split
 
 import pandas as pd
 import websockets
