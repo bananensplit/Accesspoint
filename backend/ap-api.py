@@ -65,8 +65,7 @@ def info():
         return datetime.timestamp(datetime.strptime(data, '%a %Y-%m-%d %H:%M:%S %Z'))
 
     def clients():
-        command = 'iw dev wlan0 station dump | grep Station | wc -l'.split(
-            ' | ')
+        command = 'iw dev wlan0 station dump | grep Station | wc -l'.split(' | ')
         iw = sp.Popen(command[0].split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
         grep = sp.Popen(command[1].split(
             ' '), stdin=iw.stdout, stdout=sp.PIPE, stderr=sp.STDOUT)
@@ -90,7 +89,7 @@ def clients_info():
     command = 'iw dev wlan0 station dump'
     iw = sp.Popen(command.split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
     data = iw.stdout.read().decode('ascii').strip("Station").split("Station")
-    data = [parse_station_dump(device) for device in data]
+    data = [parse_station_dump(device) for device in data if device is not None and device != '']
 
     return json.dumps({
         'timestamp': time.time() * 1000,
@@ -167,7 +166,9 @@ async def main():
 
 if __name__ == "__main__":
     logger = logging.getLogger('websockets')
-    logger.setLevel(logging.WARN)
-    logger.addHandler(logging.handlers.RotatingFileHandler(
-        "ap-websocket.log", maxBytes=10_000_000, backupCount=2, encoding='UTF-8'))
+    logger.setLevel(logging.INFO)
+    fileHandler = logging.handlers.RotatingFileHandler("ap-websocket.log", maxBytes=10_000_000, backupCount=2, encoding='UTF-8')
+    formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    fileHandler.setFormatter(formatter)
+    logger.addHandler(fileHandler)
     asyncio.run(main())
