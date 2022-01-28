@@ -132,8 +132,6 @@ def parse_station_dump(output):
     lines = [line.split(":") for line in lines]
     lines = {line[0]: line[1] for line in lines}
 
-    logger.info(lines)
-
     return {
         'mac': mac_address,
         'vendor': get_vendor_name(mac_address),
