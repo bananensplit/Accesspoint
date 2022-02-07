@@ -37,7 +37,7 @@ async def handler(websocket):
                 await websocket.send(turn_off())
             elif data['type'] == "clients_info":
                 await websocket.send(clients_info())
-    except websockets.exceptions.ConnectionClosedError:
+    except websockets.exceptions.ConnectionClosedOK:
         pass
 
 
