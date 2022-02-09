@@ -1,58 +1,110 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
+import BitRateChart from "./components/BitRateChart";
 import DeviceGrid from "./components/DeviecGrid/DeviceGrid";
 import State from "./components/State";
 import Waiting from "./components/Waiting";
-
-var ws;
+import useInterval from "./hooks/useInterval";
+import useWebsocket from "./hooks/useWebsocket";
 
 function App() {
-    const [intervalId, setIntervalId] = useState(null); // interval id
-    const [intervalDeviceId, setIntervalDeviceId] = useState(null); // interval id
+    const [intervalDelay, setIntervalDelay] = useState(null);
+    const [intervalDeviceDelay, setIntervalDeviceDelay] = useState(null);
     const [info, setInfo] = useState(null); // Info
-    const [devices, setDevices] = useState([]); // Info
+    const [devices, setDevices] = useState([]);
 
-    useEffect(() => {
-        ws = new WebSocket("wss://ap.bananensplit.com/api");
+    const [rxGraphData, setRxGraphData] = useState({});
+    const [txGraphData, setTxGraphData] = useState({});
 
-        ws.onopen = function (event) {
-            setIntervalId(setInterval(fetchData, 300));
-            setIntervalDeviceId(setInterval(fetchDevices, 1000));
-        };
+    useInterval(fetchData, intervalDelay);
+    useInterval(fetchDevices, intervalDeviceDelay);
 
-        ws.onerror = function (event) {
-            clearInterval(intervalId);
-            setIntervalId(null);
-            setIntervalDeviceId(null);
-        };
-
-        ws.onclose = function (event) {
-            clearInterval(intervalId);
-            setIntervalId(null);
-            setIntervalDeviceId(null);
-        };
-
-        ws.onmessage = function (event) {
+    const ws = useWebsocket(
+        "ws.currents://ap.bananensplit.com/api",
+        function (event) {
+            setIntervalDelay(300);
+            setIntervalDeviceDelay(300);
+        },
+        function (event) {
+            setIntervalDelay(null);
+            setIntervalDeviceDelay(null);
+        },
+        function (event) {
+            setIntervalDelay(null);
+            setIntervalDeviceDelay(null);
+        },
+        function (event) {
             const data = JSON.parse(event.data);
             if (data?.["type"] === "info") setInfo(data?.data || null);
-            if (data?.["type"] === "clients_info") setDevices(data?.data || []);
-        };
-    }, []);
+            if (data?.["type"] === "clients_info") {
+                let newTxGraphData = {};
+                let newRxGraphData = {};
+                data?.data.forEach((i) => {
+                    let newTx =
+                        txGraphData[i["mac"]] ||
+                        new Array(50).fill(0).map((value, index) => ({
+                            x: index + "",
+                            y: null,
+                        }));
+                    let newRx =
+                        rxGraphData[i["mac"]] ||
+                        new Array(50).fill(0).map((value, index) => ({
+                            x: index + "",
+                            y: null,
+                        }));
+                    newTx = newTx.slice(1);
+                    newRx = newRx.slice(1);
+                    newTx.push({
+                        x: moment().valueOf() + "",
+                        y: i["tx-bitrate"].substr(0, i["tx-bitrate"].length - 6),
+                    });
+                    newRx.push({
+                        x: moment().valueOf() + "",
+                        y: i["rx-bitrate"].substr(0, i["rx-bitrate"].length - 6),
+                    });
+                    newTxGraphData[i["mac"]] = newTx;
+                    newRxGraphData[i["mac"]] = newRx;
+                });
+                setTxGraphData(newTxGraphData);
+                setRxGraphData(newRxGraphData);
+                setDevices(
+                    data?.data.map((i) => ({
+                        "connected-time": i["connected-time"],
+                        mac: i["mac"],
+                        "tx-bitrate": (
+                            <>
+                                <BitRateChart data={[{ id: "Bandwidth", data: txGraphData[i["mac"]] || [] }]} />
+                                {i["tx-bitrate"]}
+                            </>
+                        ),
+                        "rx-bitrate": (
+                            <>
+                                <BitRateChart data={[{ id: "Bandwidth", data: rxGraphData[i["mac"]] || [] }]} />
+                                {i["rx-bitrate"]}
+                            </>
+                        ),
+                        vendor: i["vendor"],
+                    })) || []
+                );
+            }
+        }
+    );
 
     function fetchData() {
-        ws.send(JSON.stringify({ type: "info" }));
+        ws.current.send(JSON.stringify({ type: "info" }));
     }
 
     function fetchDevices() {
-        ws.send(JSON.stringify({ type: "clients_info" }));
+        ws.current.send(JSON.stringify({ type: "clients_info" }));
     }
 
     function apUp() {
-        ws.send(JSON.stringify({ type: "on" }));
+        ws.current.send(JSON.stringify({ type: "on" }));
     }
+
     function apDown() {
-        ws.send(JSON.stringify({ type: "off" }));
+        ws.current.send(JSON.stringify({ type: "off" }));
     }
 
     function getTimeStr(timestamp) {
