@@ -4,7 +4,7 @@ function useWebsocket(uri, onopen, onerror, onclose, onmessage) {
     const websocket = useRef();
     // Setup the websocket
     useEffect(() => {
-        websocket.current = new WebSocket("wss://ap.bananensplit.com/api");
+        websocket.current = new WebSocket("ws://ap.bananensplit.com/api");
 
         return () => {
             websocket.current.close();
