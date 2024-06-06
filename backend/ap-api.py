@@ -8,10 +8,8 @@ import re
 import subprocess as sp
 import time
 from argparse import RawTextHelpFormatter
-from asyncio import exceptions
 from datetime import datetime
 from functools import cache
-from logging import handlers
 
 import pandas as pd
 import websockets
@@ -26,29 +24,37 @@ async def handler(websocket):
             data = json.loads(data)
 
             if 'type' not in data or data['type'] not in ("info", "on", "off", "clients_info"):
+                logger.info("Received hello world request")
                 await websocket.send(hello_world())
                 continue
 
             if data['type'] == "info":
+                logger.info("Received info request")
                 await websocket.send(info())
             elif data['type'] == "on":
+                logger.info("Received on request")
                 await websocket.send(turn_on())
             elif data['type'] == "off":
+                logger.info("Received off request")
                 await websocket.send(turn_off())
             elif data['type'] == "clients_info":
+                logger.info("Received clients_info request")
                 await websocket.send(clients_info())
     except websockets.exceptions.ConnectionClosedOK:
         pass
 
 
 def hello_world():
-    return json.dumps({
+    result = json.dumps({
         'timestamp': time.time() * 1000,
         'type': 'HelloWorld',
         'data': {
             'message': "Hello World!"
         }
     })
+
+    logger.debug("Getting hello world: " + result)
+    return result
 
 
 def info():
@@ -75,8 +81,9 @@ def info():
         grep = sp.Popen(command[1].split(' '), stdin=iw.stdout, stdout=sp.PIPE, stderr=sp.STDOUT)
         wc = sp.Popen(command[2].split(' '), stdin=grep.stdout, stdout=sp.PIPE, stderr=sp.STDOUT)
         return int(wc.stdout.read().decode('ascii').replace('\n', ''))
-
-    return json.dumps({
+    
+    logger.debug("Getting info")
+    result = json.dumps({
         'timestamp': time.time() * 1000,
         'type': 'info',
         'data': {
@@ -87,25 +94,34 @@ def info():
         }
     })
 
+    logger.debug("Retrieved info: " + result)
+    return result
+
 
 def clients_info():
+    logger.debug("Getting clients info")
+
     command = 'iw dev wlan0 station dump'
     iw = sp.Popen(command.split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
     data = iw.stdout.read().decode('ascii').strip("Station").split("Station")
     data = [parse_station_dump(device) for device in data if device is not None and device != '']
-
-    return json.dumps({
+    result = json.dumps({
         'timestamp': time.time() * 1000,
         'type': 'clients_info',
         'data': data
     })
 
+    logger.debug("Retrieved clients info: " + result)
+    return result
+
 
 def turn_on():
+    logger.debug("Turning on AP")
+
     command = 'sudo systemctl start hostapd'
     process = sp.Popen(command.split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
     process.communicate()
-    return json.dumps({
+    result = json.dumps({
         'timestamp': time.time() * 1000,
         'type': 'on',
         'data': {
@@ -113,18 +129,26 @@ def turn_on():
         }
     })
 
+    logger.debug("Turned on AP: " + result)
+    return result
+
 
 def turn_off():
+    logger.debug("Turning off AP")
+
     command = 'sudo systemctl stop hostapd'
     process = sp.Popen(command.split(' '), stdout=sp.PIPE, stderr=sp.STDOUT)
     process.communicate()
-    return json.dumps({
+    result = json.dumps({
         'timestamp': time.time() * 1000,
         'type': 'off',
         'data': {
             'success': process.returncode == 0
         }
     })
+
+    logger.debug("Turned off AP: " + result)
+    return result
 
 
 def parse_station_dump(output):
