@@ -21,7 +21,7 @@ function App() {
     useInterval(fetchDevices, intervalDeviceDelay);
 
     const ws = useWebsocket(
-        "ws.currents://ap.bananensplit.com/api",
+        "ws://ap.bananensplit.com/api",
         function (event) {
             setIntervalDelay(300);
             setIntervalDeviceDelay(300);
