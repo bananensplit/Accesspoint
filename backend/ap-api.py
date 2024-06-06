@@ -185,7 +185,7 @@ def get_vendor_name(mac_address):
     macs = get_mac_addresses(MAC_FILE)
     mac = re.sub(r"[-:]", "", mac_address)[0:6].upper()
     erg = macs.loc[macs["Assignment"] == mac, "Organization Name"].values
-    return erg[0] if len(erg) >= 0 else None
+    return erg[0] if len(erg) > 0 else None
 
 
 async def main(port):
