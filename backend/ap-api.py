@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import logging
+import logging.handlers
 import re
 import subprocess as sp
 import time
@@ -180,6 +181,7 @@ def get_vendor_name(mac_address):
             AA-BB-CC-DD-EE-FF
             AA:BB:CC:DD:EE:FF
     """
+    global MAC_FILE
     macs = get_mac_addresses(MAC_FILE)
     mac = re.sub(r"[-:]", "", mac_address)[0:6].upper()
     erg = macs.loc[macs["Assignment"] == mac, "Organization Name"].values
